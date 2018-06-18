@@ -15,6 +15,10 @@
  */
 package heap.stark.nio.timeServer;
 
+import org.apache.thrift.TException;
+import org.apache.thrift.protocol.TBinaryProtocol;
+import org.apache.thrift.transport.TByteBuffer;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -145,9 +149,18 @@ public class MultiplexerTimeServer implements Runnable {
 	if (response != null && response.trim().length() > 0) {
 	    byte[] bytes = response.getBytes();
 	    ByteBuffer writeBuffer = ByteBuffer.allocate(bytes.length);
-	    writeBuffer.put(bytes);
-	    writeBuffer.flip();
-	    channel.write(writeBuffer);
+	    /*writeBuffer.put(bytes);
+	    writeBuffer.flip();*/
+		//thrift
+		TBinaryProtocol protocol = new TBinaryProtocol(new TByteBuffer(writeBuffer));
+		Bean bean = new Bean().setIntTest(123);
+		try {
+			bean.write(protocol);
+			writeBuffer.flip();
+		} catch (TException e) {
+			e.printStackTrace();
+		}
+		channel.write(writeBuffer);
 	}
     }
 }

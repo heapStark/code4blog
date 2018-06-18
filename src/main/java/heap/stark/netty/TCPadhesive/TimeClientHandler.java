@@ -40,7 +40,6 @@ public class TimeClientHandler extends ChannelHandlerAdapter {
 
     }
 
-    @Override
     public void channelActive(ChannelHandlerContext ctx) {
         //同一个socket连续写入消息
         for (int i = 0; i < 500; i++) {
@@ -52,7 +51,6 @@ public class TimeClientHandler extends ChannelHandlerAdapter {
         }
     }
 
-    @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg)
             throws Exception {
         ByteBuf buf = (ByteBuf) msg;
@@ -71,7 +69,6 @@ public class TimeClientHandler extends ChannelHandlerAdapter {
         ctx.close();
     }
 
-    @Override
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
         ctx.flush();
     }

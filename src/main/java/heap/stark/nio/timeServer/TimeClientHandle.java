@@ -15,6 +15,10 @@
  */
 package heap.stark.nio.timeServer;
 
+import org.apache.thrift.TException;
+import org.apache.thrift.protocol.TBinaryProtocol;
+import org.apache.thrift.transport.TByteBuffer;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -116,11 +120,19 @@ public class TimeClientHandle implements Runnable {
 		ByteBuffer readBuffer = ByteBuffer.allocate(1024);
 		int readBytes = sc.read(readBuffer);
 		if (readBytes > 0) {
-		    readBuffer.flip();
+			try {
+				Bean bean = new Bean();
+				readBuffer.flip();
+				bean.read(new TBinaryProtocol(new TByteBuffer(readBuffer)));
+				System.out.println(bean);
+			} catch (TException e) {
+				e.printStackTrace();
+			}
+		    /*readBuffer.flip();
 		    byte[] bytes = new byte[readBuffer.remaining()];
 		    readBuffer.get(bytes);
 		    String body = new String(bytes, "UTF-8");
-		    System.out.println("Now is : " + body);
+		    System.out.println("Now is : " + body);*/
 		    this.stop = true;
 		} else if (readBytes < 0) {
 		    // 对端链路关闭
