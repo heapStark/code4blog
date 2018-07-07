@@ -20,7 +20,7 @@ public class JedisClientPool {
         }
 
         private static JedisPool jedisPool = new JedisPool(config,
-                "192.168.107.53", 6379, 5000, "workorder");
+                "localhost", 6379, 5000);
     }
     //获取连接池
     public static JedisPool getPool() {
